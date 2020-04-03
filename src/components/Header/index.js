@@ -3,7 +3,7 @@ import { HeaderContent } from './styles'
 
 export default function Header(props){
     return(
-        <HeaderContent fontSize={props.fontSize} >
+        <HeaderContent fontSize={props.fontSize} fontSizeSmall={props.fontSizeSmall}>
             <h1>
                 Previsão do tempo
             </h1>

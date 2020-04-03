@@ -1,8 +1,9 @@
 html{
-  height: fit-content;
   background-attachment: fixed;
   background: linear-gradient(#FF7F01 0%, #FFBA00 100%);
   background-repeat: no-repeat !important;
+  background-size: 100%;
+  min-height: 100%;
 }
 body {
   margin: 0;
@@ -18,7 +19,6 @@ body {
   margin-left: auto;
   margin-right: auto;
 }
-
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;

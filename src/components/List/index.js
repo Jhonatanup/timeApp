@@ -7,8 +7,9 @@ export default function List(){
                 <h1>
                     Capitais
                 </h1>
-                <ul>
+                <ul className="listCities">
                     <li className="minmax">Min Máx</li>
+                    <li className="hideMinMax">Min Máx</li>
                     <li>18º 22° Rio de Janeiro</li>
                     <li>14º 22° São Paulo</li>
                     <li>21º 32° Belo Horizonte</li>
