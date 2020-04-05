@@ -57,7 +57,7 @@ export default function Display() {
           ? (
             <div className="loading">
               <FaSpinner size={72} className="fa-spin" />
-              <h1>Carregado...</h1>
+              <h1>Carregando...</h1>
             </div>
           )
           : (
