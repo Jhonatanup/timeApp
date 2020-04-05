@@ -1,7 +1,19 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Capitais } from './styles'
+import '../../services/fetchGroupData'
+import fetchGroupData from '../../services/fetchGroupData'
 
 export default function List(){
+    const [capitais, setCapitais] = useState([])
+
+    useEffect(() => {
+        async function fetch(){
+            const response = await fetchGroupData()
+            const data = await response.data.list
+            setCapitais(data) 
+        }
+        fetch()  
+    }, [])
     return(
         <Capitais>
                 <h1>
@@ -10,16 +22,11 @@ export default function List(){
                 <ul className="listCities">
                     <li className="minmax">Min Máx</li>
                     <li className="hideMinMax">Min Máx</li>
-                    <li>18º 22° Rio de Janeiro</li>
-                    <li>14º 22° São Paulo</li>
-                    <li>21º 32° Belo Horizonte</li>
-                    <li>24º 37° Brasília</li>
-                    <li>24º 37° Belém</li>
-                    <li>23º 37° Salvador</li>
-                    <li>05º 14° Curitiba</li>
-                    <li>21º 32° Fortaleza</li>
-                    <li>24º 37° Manaus</li>
-                    <li>28º 40° João Pessoa</li>
+                    {capitais.map(cap => (
+                        <li key={cap.id}>
+                            {parseFloat(cap.main.temp_min).toFixed(0)}° {parseFloat(cap.main.temp_max).toFixed(0)}° {cap.name}
+                        </li>
+                    ))}
                 </ul>
             </Capitais>
     )
