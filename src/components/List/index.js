@@ -14,8 +14,14 @@ export default function List(){
         }
         fetch()  
     }, [])
+    function isEmpty(obj) {
+        return Object.keys(obj).length === 0;
+    }
+
     return(
         <Capitais>
+            {isEmpty(capitais)? '' :   
+                <> 
                 <h1>
                     Capitais
                 </h1>
@@ -28,6 +34,8 @@ export default function List(){
                         </li>
                     ))}
                 </ul>
+                </>
+            }    
             </Capitais>
     )
 }

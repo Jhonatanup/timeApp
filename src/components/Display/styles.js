@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from 'styled-components';
 
 export const DisplayContainer = styled.section`
     position: relative;
@@ -10,6 +10,30 @@ export const DisplayContainer = styled.section`
     padding-bottom: 5px;
     margin-bottom: 15px;
     color: #505050;
+
+    .fa-spin {
+        margin-left: auto;
+        margin-right: auto;
+        animation: fa-spin 2s infinite linear;
+    }
+    @keyframes fa-spin {
+        0% {
+            transform: rotate(0deg);
+            }
+        100% {
+            transform: rotate(359deg);
+        }
+    }
+    
+    .loading{
+        padding-top: 40px;
+        margin-left: -40px;
+        display: flex;
+        flex-direction: column;     
+    }
+    .loading h1{   
+        text-align: center; 
+    }
 
     button{
         position: absolute;
