@@ -9,7 +9,8 @@ export default function SearchBar(props) {
   function search(event) {
     event.preventDefault();
     const query = document.querySelector('input[name=search]');
-    history.push(`/detail:${query.value}`);
+    localStorage.setItem('busca', query.value);
+    history.push('/detail');
   }
 
   return (

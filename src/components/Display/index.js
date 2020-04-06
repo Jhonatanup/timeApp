@@ -5,21 +5,17 @@ import {
 import { useHistory } from 'react-router-dom';
 import { DisplayContainer } from './styles';
 import fetchSingleData from '../../services/fetchSingleData';
+import minMaxForecast from '../../services/minMaxForecast';
 
 export default function Display() {
-  const busca = window.location.href.substring(window.location.href.search('detail') + 7);
+  // const busca = window.location.href.substring(window.location.href.search('detail') + 7);
+  const busca = localStorage.getItem('busca');
   const dicio = ['Tempestade', 'Garoa', 'Chuva', 'Neve', 'Névoa', 'Limpo', 'Nublado'];
   const semana = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
   const dia = new Date();
   const history = useHistory();
   const [cidade, setCidade] = useState('');
-  const [first, setFirst] = useState([]);
-  const [second, setSecond] = useState([]);
-  const [third, setThird] = useState([]);
-  const [fourth, setFourth] = useState([]);
-  const [main, setMain] = useState([]);
-  const [weather, setWeather] = useState([]);
-  const [wind, setWind] = useState('');
+  const [minMax, setMinMax] = useState([]);
 
   function goHome() {
     history.push('/');
@@ -28,17 +24,19 @@ export default function Display() {
   useEffect(() => {
     async function fetch() {
       const response = await fetchSingleData(busca);
-      setCidade(response.city);
-      setFirst(response.list[7].main);
-      setSecond(response.list[15].main);
-      setThird(response.list[23].main);
-      setFourth(response.list[31].main);
-      setMain(response.list[0].main);
-      setWeather(response.list[0].weather[0]);
-      setWind(response.list[0].wind);
+      setCidade(response);
     }
     fetch();
   }, [busca]);
+
+  useEffect(() => {
+    async function fetch() {
+      const response = await minMaxForecast(busca);
+      setMinMax(response);
+    }
+    fetch();
+  }, [busca]);
+
   let position;
 
   function setPosition(id) {
@@ -53,7 +51,7 @@ export default function Display() {
   return (
     <DisplayContainer>
       <div className="infoNow">
-        {(cidade.name === undefined || main.temp === undefined || weather.main === undefined)
+        {(cidade.name === undefined || cidade.sys === undefined || cidade.weather === undefined)
           ? (
             <div className="loading">
               <FaSpinner size={72} className="fa-spin" />
@@ -69,47 +67,51 @@ export default function Display() {
                 {cidade.name}
                 ,
                 {' '}
-                {cidade.country}
+                {cidade.sys.country}
               </p>
               <p className="temp">
-                {parseFloat(main.temp).toFixed(0)}
+                {parseFloat(cidade.main.temp).toFixed(0)}
                 °C
                 {' '}
-                {dicio[setPosition(weather.id)]}
+                {dicio[setPosition(cidade.weather[0].id)]}
               </p>
               <ul className="info">
                 <li>
                   <strong>
                     <FaArrowDown color="#F89B31" />
-                    {parseFloat(main.temp_min).toFixed(0)}
+                    {parseFloat(cidade.main.temp_min).toFixed(0)}
                     °
                   </strong>
                   {' '}
 &nbsp;
                   <strong>
                     <FaArrowUp color="#F89B31" />
-                    {parseFloat(main.temp_max).toFixed(0)}
+                    {parseFloat(cidade.main.temp_max).toFixed(0)}
                     °
                   </strong>
                 </li>
                 <li>
                   Sensação
                   <strong>
-                    {parseFloat(main.feels_like).toFixed(0)}
+                    &nbsp;
+                    {parseFloat(cidade.main.feels_like).toFixed(0)}
                     °
                   </strong>
                 </li>
                 <li>
                   Vento
                   <strong>
-                    {parseFloat(wind.speed * 3.6).toFixed(0)}
+                    &nbsp;
+                    {parseFloat(cidade.wind.speed * 3.6).toFixed(0)}
                     km/h
+
                   </strong>
                 </li>
                 <li>
                   Humidade
                   <strong>
-                    {parseFloat(main.humidity).toFixed(0)}
+                    &nbsp;
+                    {parseFloat(cidade.main.humidity).toFixed(0)}
                     %
                   </strong>
                 </li>
@@ -122,7 +124,7 @@ export default function Display() {
 
       </div>
 
-      {first.temp_min === undefined ? ''
+      {minMax[0] === undefined ? ''
         : (
           <>
             <hr />
@@ -132,31 +134,31 @@ export default function Display() {
               <li>{semana[(dia.getDay() + 3) % 6]}</li>
               <li>{semana[(dia.getDay() + 4) % 6]}</li>
               <li>
-                {parseFloat(first.temp_min).toFixed(0)}
+                {parseFloat(minMax[0]).toFixed(0)}
                 °
                 {' '}
-                {parseFloat(first.temp_max).toFixed(0)}
+                {parseFloat(minMax[4]).toFixed(0)}
                 °
               </li>
               <li>
-                {parseFloat(second.temp_min).toFixed(0)}
+                {parseFloat(minMax[1]).toFixed(0)}
                 °
                 {' '}
-                {parseFloat(second.temp_max).toFixed(0)}
+                {parseFloat(minMax[5]).toFixed(0)}
                 °
               </li>
               <li>
-                {parseFloat(third.temp_min).toFixed(0)}
+                {parseFloat(minMax[2]).toFixed(0)}
                 °
                 {' '}
-                {parseFloat(third.temp_max).toFixed(0)}
+                {parseFloat(minMax[6]).toFixed(0)}
                 °
               </li>
               <li>
-                {parseFloat(fourth.temp_min).toFixed(0)}
+                {parseFloat(minMax[3]).toFixed(0)}
                 °
                 {' '}
-                {parseFloat(fourth.temp_max).toFixed(0)}
+                {parseFloat(minMax[7]).toFixed(0)}
                 °
               </li>
             </ul>
